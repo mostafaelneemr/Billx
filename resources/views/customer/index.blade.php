@@ -29,6 +29,7 @@
                 <thead>
                 <tr>
                     <th>customer name</th>
+                    <th>customer email</th>
                     <th>customer address</th>
                     <th>customer phone</th>
                     <th>customer gender</th>
@@ -94,6 +95,7 @@
                 ajax: "{{ Route('customers.index', ['datatable' => true]) }}",
                 columns: [
                     { data:'name', },
+                    { data:'email', },
                     { data:'address', },
                     { data:'phone', },
                     { data:'gender', },

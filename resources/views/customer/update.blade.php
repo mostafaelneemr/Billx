@@ -56,9 +56,9 @@
                         <div class="col-md-6">
                         <label for="exampleSelect2">Gender<span class="text-danger">*</span> </label>
                         <select class="form-control" name="gender" id="exampleSelect2" required>
-                            <option value="" selected disabled></option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
+                            <option value="" disabled></option>
+                            <option value="male" {{ $customer->gender == "male" ? 'selected' : '' }}>Male</option>
+                            <option value="female" {{ $customer->gender == "female" ? 'selected' : '' }}>Female</option>
                         </select>
                         @error('gender') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>

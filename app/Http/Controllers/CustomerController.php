@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CustomerRequest;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
@@ -39,19 +40,9 @@ class CustomerController extends Controller
         return view('customer.create');
     }
 
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
         try {
-            $this->validate($request , [
-                'name' => 'required|string|min:3|max:100',
-                'email' => 'required|email|max:255|unique:customers,email',
-                'address' => 'required|string|max:255',
-                'phone' => 'required|numeric|digits:11|regex:/(01)[0-9]{9}/',
-                'city' => 'nullable|string|max:255',
-                'gender' => 'required|string|in:male,female',
-                'details' => 'nullable|string',
-            ]);
-
             Customer::create([
                 'name' => $request->name,
                 'email' => $request->email,
@@ -85,19 +76,9 @@ class CustomerController extends Controller
         return view('customer.update', compact('customer'));
     }
 
-    public function update(Request $request,$id)
+    public function update(CustomerRequest $request,$id)
     {
         try {
-            $this->validate($request , [
-                'name' => 'required|string|min:3|max:100',
-                'email' => 'required|email|max:255|exists:customers,email',
-                'address' => 'required|string|max:255',
-                'phone' => 'required|numeric|digits:11|regex:/(01)[0-9]{9}/',
-                'city' => 'nullable|string|max:255',
-                'gender' => 'required|string|in:male,female',
-                'details' => 'nullable|string',
-            ]);
-
             $customer = Customer::findOrFail($id);
             $customer->where('id', $id)->update([
                 'name' => $request->name,
