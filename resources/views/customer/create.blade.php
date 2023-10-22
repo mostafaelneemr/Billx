@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    {{-- @include('message') --}}
+    @include('message')
 
     <!--begin::Row-->
     <div class="card">
@@ -40,7 +40,7 @@
 
                         <div class="col-md-6">
                             <label>City</label>
-                            <input type="text" name="city" value="{{ old('city') }}" class="form-control" required />
+                            <input type="text" name="city" value="{{ old('city') }}" class="form-control" />
                             @error('city') <span class="text-danger">{{ $message }}</span> @enderror
                         </div>
                     </div>
@@ -86,14 +86,6 @@
 @section('script')
     <script src="{{asset('assets/js/pages/crud/forms/widgets/bootstrap-datepicker.js')}}" type="text/javascript"></script>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
-    
-    <script type="text/javascript">
-       $(document).ready(function () {
-           CKEDITOR.replace('details');
-       });
-   </script>
     <script type="text/javascript">
 
         $('select').select2({
@@ -102,4 +94,15 @@
             width:"100%",
         });
     </script>
+    
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://cdn.ckeditor.com/4.14.0/standard/ckeditor.js"></script>
+    
+    <script type="text/javascript">
+       $(document).ready(function () {
+           CKEDITOR.replace('details');
+       });
+   </script>
+
 @endsection

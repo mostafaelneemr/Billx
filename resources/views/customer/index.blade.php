@@ -49,62 +49,58 @@
     <script src="{{asset('assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
     <script src="{{asset('assets/js/pages/crud/datatables/basic/paginations.js')}}"></script>
 
+    <script type="text/javascript">
+        function deleteCustomer($routeName,$reload){
+            if(!confirm("Do you want to delete this Brand?")){ return false; }
+            if($reload == undefined){ $reload = 3000; }
 
+            addLoading();
 
+            $.post(
+                $routeName,
+                {
+                    '_method':'DELETE',
+                    '_token':$('meta[name="csrf-token"]').attr('content')
+                },
+                function(response){
+                    removeLoading();
+                    if(isJSON(response)){
+                        $data = response;
+                        if($data.status == true){
+                            toastr.success($data.message, 'Success !', {"closeButton": true});
+                            $('#table_id').DataTable().ajax.reload();
+                        }else{
+                            toastr.error($data.message, 'Error !', {"closeButton": true});
+                        }
+                    }
+                }
+            )
+        }
+    </script>
     
 @endsection
 
 @push('js')
-<script type="text/javascript">
-    function deleteCustomer($routeName,$reload){
+    <script type="text/javascript">
+        $(function () {
 
-        if(!confirm("Do you want to delete this Customer?")){ return false; }
+            $datatable = $('#table_id').DataTable({
+                processing: true,
+                serverSide: true,
+                order: [
+                    [0, "DESC"],
+                ],
+                "pageLength": 25,
+                ajax: "{{ Route('customers.index', ['datatable' => true]) }}",
+                columns: [
+                    { data:'name', },
+                    { data:'address', },
+                    { data:'phone', },
+                    { data:'gender', },
+                    { data:'action', },
+                ],
+            });
 
-        if($reload == undefined){ $reload = 3000; }
-        addLoading();
-
-        $.post(
-            $routeName,
-            {
-                '_method':'DELETE',
-                '_token':$('meta[name="csrf-token"]').attr('content')
-            },
-            function(response){
-                removeLoading();
-                if(isJSON(response)){
-                    $data = response;
-                    if($data.status == true){
-                        toastr.success($data.message, 'Success !', {"closeButton": true});
-                        $('#table_id').DataTable().ajax.reload();
-                    }else{
-                        toastr.error($data.message, 'Error !', {"closeButton": true});
-                    }
-                }
-            }
-        )
-    }
-</script>
-
-<script type="text/javascript">
-    $(function () {
-
-        $datatable = $('#table_id').DataTable({
-            processing: true,
-            serverSide: true,
-            order: [
-                [0, "DESC"],
-            ],
-            "pageLength": 25,
-            ajax: "{{ Route('customers.index', ['datatable' => true]) }}",
-            columns: [
-                { data:'name', },
-                { data:'address', },
-                { data:'phone', },
-                { data:'gender', },
-                { data:'action', },
-            ],
         });
-
-    });
-</script>
+    </script>
 @endpush

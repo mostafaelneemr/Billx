@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('layout.master');
+    return redirect()->route('customers.index');
 })->name('dashboard');
 
 Route::resource('customers', CustomerController::class);

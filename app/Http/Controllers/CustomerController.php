@@ -46,7 +46,7 @@ class CustomerController extends Controller
                 'name' => 'required|string|min:3|max:100',
                 'email' => 'required|email|max:255|unique:customers,email',
                 'address' => 'required|string|max:255',
-                'phone' => 'required|numeric|min:11',
+                'phone' => 'required|numeric|digits:11|regex:/(01)[0-9]{9}/',
                 'city' => 'nullable|string|max:255',
                 'gender' => 'required|string|in:male,female',
                 'details' => 'nullable|string',
@@ -69,7 +69,7 @@ class CustomerController extends Controller
 
             return redirect()->route('customers.index')->with($notification);
         } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['errors' => $e->getMessage()]);
+            return redirect()->back()->withInput()->withErrors(['errors' => $e->getMessage()]);
         }
     }
 
@@ -88,6 +88,16 @@ class CustomerController extends Controller
     public function update(Request $request,$id)
     {
         try {
+            $this->validate($request , [
+                'name' => 'required|string|min:3|max:100',
+                'email' => 'required|email|max:255|exists:customers,email',
+                'address' => 'required|string|max:255',
+                'phone' => 'required|numeric|digits:11|regex:/(01)[0-9]{9}/',
+                'city' => 'nullable|string|max:255',
+                'gender' => 'required|string|in:male,female',
+                'details' => 'nullable|string',
+            ]);
+
             $customer = Customer::findOrFail($id);
             $customer->where('id', $id)->update([
                 'name' => $request->name,
@@ -110,9 +120,10 @@ class CustomerController extends Controller
         }
     }
 
-    public function destroy(Customer $customer, $id)
+    public function destroy($id)
     {
-        $message = __( 'Project deleted successfully' );
+        $customer = Customer::findOrFail($id);
+        $message = __( 'Customer deleted successfully' );
         $customer->where('id',$id)->delete();
 
         return $this->response(true, 200, $message );
